@@ -26,6 +26,7 @@ float weightVal = 0.0L;
 esp_err_t ret;
 nvs_handle_t nvsHandle;
 bool calibrateComplete = false;
+int32_t arcSample = 0;
 
 int32_t map(int32_t x) {
     return (int32_t) ((x*100)/3000); 
@@ -122,20 +123,29 @@ void getADCValue(void *pvParameter){
         ESP_LOGI("..", "ADC 1 running.");
         float adc_val = 0.0L;
         //Get an average value from 5 different reads
-        float samples = 0;
-        for(int i = 0; i < 5; i++){
-            samples += ADS1230_read();
-        }
-        adc_val = samples/5.0L;
-        if(adc_val < 50000.0L && calibrateComplete == false){ //First weight detected shouold be used as calibration if not calibrated.
-            calibrateWeight();
-            calibrateComplete = true;
-            nvsCalibrationRecord();
-        }
-        if(adc_val > 50000.0L){ //for weight over around 3-5KG just filter it out as nothing.
-            adc_val = 0.0L;
-        }
-        weightVal = getWeight(adc_val);
+        static float avgSamples = 0.0L;
+        static int i = 0;
+        int32_t currentSample = 0;
+        currentSample = ADS1230_read();
+        avgSamples += currentSample;
+        i++;
+        if(i == 5){
+            adc_val = avgSamples/5.0L;
+            i = 0; 
+            avgSamples = 0;
+
+            if(adc_val < 50000.0L && calibrateComplete == false){ //First weight detected shouold be used as calibration if not calibrated.
+                calibrateWeight();
+                calibrateComplete = true;
+                nvsCalibrationRecord();
+                }
+            if(adc_val > 50000.0L){ //for weight over around 3-5KG just filter it out as nothing.
+                adc_val = 0.0L;
+            }
+                weightVal = getWeight(adc_val);
+            }
+        if(currentSample > 50000.0L){currentSample = 0.0L;}
+        arcSample = getWeight(currentSample); //This weight value is temperary for the arc. 
         sprintf(dispTxt, "%d", (int32_t)weightVal);
         vTaskDelay(pdMS_TO_TICKS(15));
     }
@@ -145,7 +155,7 @@ extern void screen_init(void);
 
 void lvgl_task(void* arg) {
     for (;;) {
-        int numInt = map((int32_t)weightVal);
+        int numInt = map(arcSample);
         if(calibrateComplete){
             lv_label_set_text(ui_Label2, dispTxt);//lv_label_set_text(label1, myStr);
             lv_meter_set_indicator_end_value(ui_meter, indic1, numInt);

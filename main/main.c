@@ -121,17 +121,22 @@ void getADCValue(void *pvParameter){
     for(;;){
         ESP_LOGI("..", "ADC 1 running.");
         float adc_val = 0.0L;
-        adc_val = ADS1230_read();
-        if(adc_val < 50000 && calibrateComplete == false){
+        //Get an average value from 5 different reads
+        float samples = 0;
+        for(int i = 0; i < 5; i++){
+            samples += ADS1230_read();
+        }
+        adc_val = samples/5.0L;
+        if(adc_val < 50000.0L && calibrateComplete == false){ //First weight detected shouold be used as calibration if not calibrated.
             calibrateWeight();
             calibrateComplete = true;
             nvsCalibrationRecord();
         }
-        if(adc_val > 50000){
+        if(adc_val > 50000.0L){ //for weight over around 3-5KG just filter it out as nothing.
             adc_val = 0.0L;
         }
         weightVal = getWeight(adc_val);
-        sprintf(dispTxt, "%.3f", weightVal);
+        sprintf(dispTxt, "%d", (int32_t)weightVal);
         vTaskDelay(pdMS_TO_TICKS(15));
     }
 }

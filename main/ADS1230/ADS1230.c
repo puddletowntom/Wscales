@@ -56,9 +56,7 @@ void ADS1230_init(){
 }
 
 bool hasData(){ //Wait until data line is pulled low for data to be available
-    while(gpio_get_level(GPIO_ADS_DATA)){
-        //printf("pending...\n");
-    }
+    while(gpio_get_level(GPIO_ADS_DATA));
     return true;
 }
 
@@ -97,22 +95,20 @@ void calibrateADC(){
 
 void calibrateWeight(){
     ESP_LOGI("..", "Calibrating.");
-    float samples = 0.0L;
-    ADS1230_read(); //skip first val
+    float samplesRaw = 0;
     vTaskDelay(500/portTICK_PERIOD_MS);
-    for(int i = 0; i < 5; i++){
-        samples += ADS1230_read();
-        vTaskDelay(250/portTICK_PERIOD_MS);
+    for(int i = 0; i < 10; i++){
+        samplesRaw += ADS1230_read();
         ESP_LOGI("..", "Calibrating.");
     }
-    calibrateVal = samples/5.0L;
+    calibrateVal = samplesRaw/10.0L;
     char myStr[20];
     sprintf(myStr, "%f", calibrateVal);
     ESP_LOGI("..", "Values calibration for 1kg: %s \n", myStr);
    // printf("Valus calibration for 1kg: %s \n", myStr);
 }
 
-float ADS1230_read(){
+int32_t ADS1230_read(){
     hasData();
     gpio_set_level(GPIO_ADS_CLK, LOW); //Set the clock low to ready it for pulse.
     

@@ -5,7 +5,7 @@
 #include <stdbool.h>
 
 void ADS1230_init();
-float ADS1230_read();
+int32_t ADS1230_read();
 bool hasData();
 void calibrateADC();
 void calibrateWeight();

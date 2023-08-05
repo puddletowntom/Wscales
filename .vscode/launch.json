@@ -1,0 +1,24 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+		"preLaunchTask": "preRun",
+            "name": "ESP32 OpenOCD",
+            "type": "cppdbg",
+            "request": "launch",
+            "cwd": "${workspaceFolder}/build",
+            "program": "${workspaceFolder}/build/Wscales.elf",
+            "miDebuggerPath": "C:/Espressif/tools/xtensa-esp32s3-elf/esp-2022r1-11.2.0/xtensa-esp32s3-elf/bin/xtensa-esp32s3-elf-gdb.exe",
+            //"miDebuggerPath": "${command:espIdf.getXtensaGdb}",
+            "setupCommands": [
+                {"text": "target remote :3333"},
+                {"text": "set remote hardware-watchpoint-limit 2"},
+                {"text": "monitor reset halt"},  
+                {"text": "flushregs"}
+            ]
+        }
+    ]
+}

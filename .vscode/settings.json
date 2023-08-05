@@ -1,0 +1,9 @@
+{
+    "files.associations": {
+        "ctype.h": "c",
+        "unity.h": "c",
+        "nvs.h": "c",
+        "esp_partition.h": "c",
+        "esp_flash_encrypt.h": "c"
+    }
+}

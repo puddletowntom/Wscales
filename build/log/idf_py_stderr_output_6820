@@ -1,0 +1,7 @@
+CMake Warning at C:/Espressif/frameworks/esp-idf-v5.0.1/tools/cmake/component.cmake:268 (message):
+  SRCS and SRC_DIRS are both specified; ignoring SRC_DIRS.
+Call Stack (most recent call first):
+  C:/Espressif/frameworks/esp-idf-v5.0.1/tools/cmake/component.cmake:442 (__component_add_sources)
+  main/CMakeLists.txt:6 (idf_component_register)
+
+

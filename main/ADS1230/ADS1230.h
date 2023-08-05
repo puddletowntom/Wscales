@@ -12,5 +12,6 @@ void calibrateWeight();
 void pwrADS1230_up();
 void pwrADS1230_down();
 float getWeight(float adc_val);
+extern float calibrateVal;
 
 #endif

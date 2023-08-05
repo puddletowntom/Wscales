@@ -4,7 +4,8 @@
             "name": "Win32",
             "includePath": [
                 "${workspaceFolder}/**",
-                "C:/Espressif/frameworks/esp-idf-v5.0.1/**"
+                "C:/Espressif/frameworks/esp-idf-v5.0.1/**",
+                "C:/Espressif/frameworks/esp-idf-v5.0.1/components/nvs_flash/include"
             ],
             "defines": [
                 "_DEBUG",

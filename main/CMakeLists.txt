@@ -7,7 +7,7 @@ idf_component_register(
     SRC_DIRS ${DIRS} ${LVGL_EXAMPLES} "."
 	SRCS "main.c" "screen.c" ${SRC_UI} ${SRC_ADS1230}
     INCLUDE_DIRS "." ${LVGL_EXAMPLES} ${DIRS} "ui" "ADS1230"
-    REQUIRES esp_lcd driver lvgl esp_timer
+    REQUIRES esp_lcd driver lvgl esp_timer nvs_flash
 )
 
 target_compile_options(${COMPONENT_LIB} PRIVATE "-Wno-format")

@@ -23,6 +23,7 @@
 #define ADS1230_HOST    HSPI_HOST
 char dispTxt[20];
 float weightVal = 0.0L;
+float bowlWeight = 55;
 esp_err_t ret;
 nvs_handle_t nvsHandle;
 bool calibrateComplete = false;
@@ -67,7 +68,7 @@ void nvsCalibrationRecord(){
     // Close NVS
     ret = nvs_commit(nvsHandle);
     if (ret != ESP_OK) {
-        printf("Failed to commit changes. Error code: %d\n", ret);
+        printf("Failed to commit changes. Error code: %d\n", ret); 
     }
     nvs_close(nvsHandle);
 }
@@ -143,6 +144,12 @@ void getADCValue(void *pvParameter){
                 adc_val = 0.0L;
             }
                 weightVal = getWeight(adc_val);
+                if(calibrateComplete){
+                    weightVal -= bowlWeight;
+                    if(weightVal <= 2){ //Omit 1 gram to for minor error
+                        weightVal = 0;
+                    }
+                }
             }
         if(currentSample > 50000.0L){currentSample = 0.0L;}
         arcSample = getWeight(currentSample); //This weight value is temperary for the arc. 

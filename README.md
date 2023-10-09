@@ -31,6 +31,23 @@ For the 3D printed case I have included the 3mf files. This project includes the
 - ESP-IDF for development environment,
 - SquareLine Studio for display graphics
 
+#Pinout
+
+You can find the entire pinout with the schematic provided. But a brief overview is as follows,
+
+Load Cell Pins
+
+- TP2 - 3.3V,
+- TP3 - GND,
+- TP4 - AINP,
+- TP5 - AINN
+
+Buttons
+
+- TP6 to TP7 for Power button,
+- SW3 - Reset button,
+- SW4 - Boot button
+
 # Calibration
 
 Due to the sensitivity of the load cell, the screw tightness of the load cells and the potential subtle minor variations of every printed case, its necessary to do a calibration of each scales. This is done by using a known weight as a reference so that an offset can be used to compensate for small difference. I include the weight of the metal plate in the calibration. The metal plate weights 55 grams so the metal plate plus a fixed 1kg weight is used for getting the reference. 
